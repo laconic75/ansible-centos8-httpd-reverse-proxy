@@ -1,0 +1,21 @@
+---
+- name: Upload https certificate 
+  copy: 
+    src: "{{ key_path | default(omit) }}{{ hostname }}.cer"
+    dest: "/etc/pki/tls/certs/{{ hostname }}.cer"
+  tags: 
+    - apache
+    - ssl
+  notify:
+    - restart httpd
+
+- name: Upload https private key
+  copy: 
+    src: "{{ key_path | default(omit) }}{{ hostname }}.pem"
+    dest: "/etc/pki/tls/private/{{ hostname }}.pem"
+  tags: 
+    - apache
+    - ssl
+  notify:
+    - restart httpd
+

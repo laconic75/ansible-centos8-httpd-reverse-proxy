@@ -1,0 +1,26 @@
+- name: Install Certbot
+  yum:
+    name:
+      - certbot
+      - python3-certbot
+      - python3-certbot-apache
+      - python3-certbot-dns-route53
+      - python3-certbot-dns-digitalocean
+    state: present
+
+- name: Get Certificates
+  command: "certbot certonly --dns-route53 -d {{ hostname }} -m joel@conexions.me --agree-tos -n"
+  args:
+    creates: "/etc/letsencrypt/live/{{ hostname }}/fullchain.pem"
+    
+- name: Copy Certificate to /etc/pki
+  copy:
+    src: "/etc/letsencrypt/live/{{ hostname }}/fullchain.pem"
+    dest: "/etc/pki/tls/certs/{{ hostname }}.cer"
+    reomte_src: yes
+    
+- name: Copy Key to /etc/pki
+  copy:
+    src:  "/etc/letsencrypt/live/{{ hostname }}/privkey.pem"
+    dest: "/etc/pki/tls/private/{{ hostname }}.pem"
+    reomte_src: yes
