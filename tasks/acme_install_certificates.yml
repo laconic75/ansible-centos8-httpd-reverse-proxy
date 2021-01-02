@@ -17,10 +17,10 @@
   copy:
     src: "/etc/letsencrypt/live/{{ hostname }}/fullchain.pem"
     dest: "/etc/pki/tls/certs/{{ hostname }}.cer"
-    reomte_src: yes
+    remote_src: yes
     
 - name: Copy Key to /etc/pki
   copy:
     src:  "/etc/letsencrypt/live/{{ hostname }}/privkey.pem"
     dest: "/etc/pki/tls/private/{{ hostname }}.pem"
-    reomte_src: yes
+    remote_src: yes
