@@ -11,6 +11,14 @@
     - package_install
     - apache
 
+- name: Start and enable Apache
+  service:
+    name: httpd
+    state: started
+    enabled: yes
+  tags: 
+    - apache
+
 - name: Allow Apache to run as a proxy server
   ansible.posix.seboolean:
     name: httpd_can_network_connect
@@ -28,26 +36,13 @@
   notify:
     - restart httpd
 
+- name: Install certificates
+  include: install_certificates.yml
+  when: (acme_certificates is false) or (acme_certificates is not defined)
 
-- name: Upload https certificate 
-  copy: 
-    src: "{{ key_path | default(omit) }}{{ hostname }}.cer"
-    dest: "/etc/pki/tls/certs/{{ hostname }}.cer"
-  tags: 
-    - apache
-    - ssl
-  notify:
-    - restart httpd
-
-- name: Upload https private key
-  copy: 
-    src: "{{ key_path | default(omit) }}{{ hostname }}.pem"
-    dest: "/etc/pki/tls/private/{{ hostname }}.pem"
-  tags: 
-    - apache
-    - ssl
-  notify:
-    - restart httpd
+- name: Install certificates
+  include: acme_install_certificates.yml
+  when: acme_certificates is true
 
 - name: Open firewall https ports
   ansible.posix.firewalld:
