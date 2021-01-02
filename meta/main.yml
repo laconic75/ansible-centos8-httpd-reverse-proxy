@@ -1,0 +1,5 @@
+dependencies:
+  - name: general
+    src: git@github.com:laconic75/ansible-centos8-general.git
+    scm: git
+    version: master
