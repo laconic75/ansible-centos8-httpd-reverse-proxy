@@ -7,20 +7,32 @@
       - python3-certbot-dns-route53
       - python3-certbot-dns-digitalocean
     state: present
+  tags: 
+    - apache
+    - certbot
 
 - name: Get Certificates
   command: "certbot certonly --dns-route53 -d {{ hostname }} -m joel@conexions.me --agree-tos -n"
   args:
     creates: "/etc/letsencrypt/live/{{ hostname }}/fullchain.pem"
+  tags: 
+    - apache
+    - certbot
     
 - name: Copy Certificate to /etc/pki
   copy:
     src: "/etc/letsencrypt/live/{{ hostname }}/fullchain.pem"
     dest: "/etc/pki/tls/certs/{{ hostname }}.cer"
     remote_src: yes
+  tags: 
+    - apache
+    - certbot
     
 - name: Copy Key to /etc/pki
   copy:
     src:  "/etc/letsencrypt/live/{{ hostname }}/privkey.pem"
     dest: "/etc/pki/tls/private/{{ hostname }}.pem"
     remote_src: yes
+  tags: 
+    - apache
+    - certbot
