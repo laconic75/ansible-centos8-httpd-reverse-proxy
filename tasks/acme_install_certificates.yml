@@ -12,7 +12,7 @@
     - certbot
 
 - name: Get Certificates
-  command: "certbot certonly --dns-route53 -d {{ hostname }} -m joel@conexions.me --agree-tos -n"
+  command: "certbot certonly --dns-route53 -d {{ hostname }} -m {{ admin_email }} --agree-tos -n"
   args:
     creates: "/etc/letsencrypt/live/{{ hostname }}/fullchain.pem"
   tags: 
